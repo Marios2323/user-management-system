@@ -9,29 +9,30 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Repository layer
+        // Repository
         UserRepository userRepository = new InMemoryUserRepository();
 
-        // Service layer
+        // Services
         UserService userService = new UserService(userRepository);
         AuthService authService = new AuthService(userService);
 
-        // Create users
-        User user = new User("michael", "1234", Role.USER);
-        User admin = new User("admin", "admin123", Role.ADMIN);
+        // Users
+        User user = new User("Michael", "1234", Role.USER);
+        User admin = new User("Admin", "admin123", Role.ADMIN);
 
         userService.save(user);
         userService.save(admin);
 
-        // Demo flow
-        System.out.println("User exists: " + userService.exists("michael"));
+        System.out.println("User exists: " + userService.exists("Michael"));
 
-        boolean loginResult = authService.login("michael", "1234");
-        System.out.println("Login successful: " + loginResult);
+        boolean loginResult = authService.login("Michael", "1234");
+        System.out.println("Login successful: " + loginResult
+                + " \nUser: " + user.getUsername() + " exists in the database");
 
-        System.out.println("Is admin: " + authService.isAdmin("admin"));
-
-        userService.delete("michael");
-        System.out.println("User exists after delete: " + userService.exists("michael"));
+        System.out.println("User: " + admin.getUsername() + " is an admin: "
+                + authService.isAdmin("Admin"));
+        userService.delete("Michael");
+        System.out.println("User " + user.getUsername() + " exists in the database after delete: "
+                + userService.exists("Michael"));
     }
 }
